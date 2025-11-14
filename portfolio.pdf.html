@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پورتفولیو اشکان نوروزی - نسخه PDF</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: #0a0a12;
+            color: #e0e0ff;
+            padding: 50px 20px;
+            line-height: 1.9;
+            overflow: hidden;
+        }
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            text-align: center; 
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        /* عنوان با افکت نوشتاری */
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #8b5cf6, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 18px;
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 2s steps(20) forwards, glowPulse 2s infinite alternate;
+        }
+        h1::after {
+            content: '|';
+            animation: blink 0.7s infinite;
+            color: #8b5cf6;
+            margin-right: 5px;
+        }
+
+        /* QR Code با پالس */
+        .qr-container {
+            width: 240px;
+            height: 240px;
+            margin: 40px auto;
+            padding: 18px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            animation: float 4s ease-in-out infinite, scaleIn 1s ease-out;
+        }
+        .qr-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+
+        /* لینک با انیمیشن سایت اصلی */
+        .styled-link {
+            display: inline-block;
+            font-size: 1.45rem;
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 14px 36px;
+            border: 2.5px solid #8b5cf6;
+            border-radius: 50px;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            animation: slideInUp 1s ease-out 0.5s backwards;
+        }
+        .styled-link::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.7s;
+            transform: skewX(-25deg);
+        }
+        .styled-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 3px;
+            background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+            transition: width 0.5s ease;
+        }
+        .styled-link:hover {
+            color: white;
+            background: #8b5cf6;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(139,92,246,0.5);
+        }
+        .styled-link:hover::before { left: 100%; }
+        .styled-link:hover::after { width: 100%; }
+
+        /* متن نکته با افکت تایپ */
+        .note {
+            font-size: 1.15rem;
+            color: #94a3b8;
+            margin: 35px 0;
+            padding: 25px;
+            background: #12121e;
+            border-radius: 18px;
+            border: 1px solid #2d2d44;
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 1s ease-out 0.7s backwards;
+        }
+        .note strong { color: #8b5cf6; }
+        .note::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139,92,246,0.05), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        /* اطلاعات تماس */
+        .contact-info {
+            margin: 30px 0;
+            font-size: 1.1rem;
+            animation: fadeInUp 1s ease-out 1s backwards;
+        }
+        .contact-info a {
+            color: #8b5cf6;
+            text-decoration: none;
+            position: relative;
+        }
+        .contact-info a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 0; height: 1.5px;
+            background: #8b5cf6;
+            transition: width 0.3s ease;
+        }
+        .contact-info a:hover::after { width: 100%; }
+
+        .footer {
+            margin-top: 60px;
+            font-size: 0.9rem;
+            color: #666;
+            animation: fadeIn 1s ease-out 1.5s backwards;
+        }
+
+        /* انیمیشن‌ها */
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes glowPulse {
+            from { filter: drop-shadow(0 0 10px rgba(139,92,246,0.5)); }
+            to { filter: drop-shadow(0 0 25px rgba(139,92,246,0.9)); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* چاپ */
+        @media print {
+            body { 
+                background: white; 
+                color: black; 
+                padding: 30px;
+            }
+            h1 { 
+                -webkit-text-fill-color: #8b5cf6; 
+                background: none;
+                animation: none;
+            }
+            .qr-container { 
+                box-shadow: 0 8px 20px rgba(0,0,0,0.2); 
+                animation: none;
+            }
+            .styled-link { 
+                color: #8b5cf6; 
+                border-color: #8b5cf6;
+                background: transparent;
+                animation: none;
+            }
+            .note { 
+                background: #f8f9fa; 
+                color: #333; 
+                border: 1px solid #ddd;
+            }
+            .note::before { display: none; }
+            * { animation: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- عنوان -->
+        <h1>Ashkan Norouzi</h1>
+        <p style="font-size:1.55rem;margin:18px 0;color:#94a3b8;">
+            مهندس بک‌اند پایتون • متخصص Web Scraping • توسعه‌دهنده اتوماسیون
+        </p>
+
+        <!-- QR Code -->
+        <div class="qr-container">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://ashkan0201.github.io/portfolio" alt="QR Code">
+        </div>
+
+        <!-- لینک اصلی -->
+        <a href="https://ashkan0201.github.io/portfolio" target="_blank" class="styled-link">
+            باز کردن پورتفولیو کامل
+        </a>
+
+        <!-- نکته -->
+        <div class="note">
+            <strong>با اسکن این QR Code وارد پورتفولیو اصلی اشکان نوروزی شوید</strong>
+        </div>
+
+        <!-- اطلاعات تماس -->
+        <div class="contact-info">
+            <strong>ایمیل:</strong> <a href="mailto:ashkan02011@gmail.com">ashkan02011@gmail.com</a><br>
+            <strong>گیت‌هاب:</strong> <a href="https://github.com/ashkan0201" target="_blank">github.com/ashkan0201</a>
+        </div>
+    </div>
+
+</body>
+</html>
