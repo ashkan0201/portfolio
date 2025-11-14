@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اشکان نوروزی - مهندس بک‌اند پایتون و وب اسکریپینگ</title>
+    
+    <!-- فونت‌ها -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #0a0a12;
+            --card: #12121e;
+            --text: #e0e0ff;
+            --accent: #8b5cf6;
+            --accent2: #3b82f6;
+            --gray: #94a3b8;
+            --border: #2d2d44;
+            --glow: 0 0 30px rgba(139, 92, 246, 0.6);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Vazirmatn', sans-serif;
+            line-height: 1.9;
+            overflow-x: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+        /* هدر */
+        header {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(-45deg, #1e1b4b, #0f0f1a, #1e1b4b, #2a1a5e);
+            background-size: 400% 400%;
+            animation: gradientShift 18s ease infinite, parallaxBg 30s linear infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes parallaxBg {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+        header::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(139,92,246,0.15), transparent 70%);
+            animation: pulseGlow 4s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes pulseGlow {
+            from { opacity: 0.6; transform: scale(1); }
+            to { opacity: 1; transform: scale(1.1); }
+        }
+
+        h1 {
+            font-family: 'Space Grotesk';
+            font-size: 6.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 3s ease-in-out infinite alternate, float 6s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+        @keyframes titleGlow {
+            from { filter: drop-shadow(0 0 20px rgba(139,92,246,0.5)); }
+            to { filter: drop-shadow(0 0 50px rgba(139,92,246,1)); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* انیمیشن اسکرول */
+        section {
+            padding: 140px 0;
+            opacity: 0;
+            transform: translateY(80px);
+            transition: all 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .skill-item, .project-card, .card, .contact-item, .about-card {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.9s ease;
+        }
+        .skill-item.visible { opacity: 1; transform: translateY(0); transition-delay: calc(0.1s * var(--i, 0)); }
+        .project-card.visible { opacity: 1; transform: translateY(0); transition-delay: calc(0.15s * var(--i, 0)); }
+
+        h2 {
+            font-size: 3.8rem;
+            text-align: center;
+            margin-bottom: 90px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            position: relative;
+            animation: slideInDown 1s ease-out;
+        }
+        h2::after {
+            content: ''; position: absolute; bottom: -15px; left: 50%; width: 0; height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 2px; transform: translateX(-50%);
+            animation: expandLine 1.5s ease-out forwards;
+        }
+        @keyframes expandLine { to { width: 120px; } }
+
+        /* کارت‌ها */
+        .about-card, .card, .project-card, .contact-item {
+            background: var(--card);
+            padding: 40px;
+            border-radius: 28px;
+            border: 1px solid var(--border);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            backdrop-filter: blur(14px);
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .about-card::before, .card::before, .project-card::before, .contact-item::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.7s; transform: skewX(-25deg);
+        }
+        .about-card:hover::before, .card:hover::before, .project-card:hover::before, .contact-item:hover::before {
+            left: 100%;
+        }
+        .project-card:hover, .contact-item:hover {
+            transform: translateY(-20px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 35px 90px rgba(139,92,246,0.5);
+            border-color: var(--accent);
+        }
+
+        /* Skill Bars */
+        .skill-bar {
+            height: 14px;
+            background: var(--border);
+            border-radius: 7px;
+            overflow: hidden;
+            margin-top: 10px;
+            position: relative;
+        }
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            width: 0;
+            border-radius: 7px;
+            transition: width 2.2s cubic-bezier(0.65, 0, 0.35, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .skill-fill::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* پروژه‌ها */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        @media (max-width: 768px) {
+            .projects-grid { grid-template-columns: 1fr; }
+        }
+        .project-card {
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .project-card * { pointer-events: none; }
+
+        .project-icon {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.5s ease;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .project-icon i { font-size: 3.8rem; animation: float 5s ease-in-out infinite; }
+        .project-icon::before {
+            content: ''; position: absolute; width: 200%; height: 200%; background: rgba(255,255,255,0.1);
+            transform: rotate(30deg); top: -50%; left: -50%; animation: rotateShine 8s linear infinite;
+        }
+        @keyframes rotateShine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* دکمه‌ها */
+        .btn {
+            display: inline-block;
+            padding: 18px 50px;
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%;
+            background: var(--accent); transition: 0.5s; z-index: -1;
+        }
+        .btn:hover::before { width: 100%; }
+        .btn:hover {
+            color: #fff;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(139,92,246,0.6);
+            animation: pulseBtn 1.5s infinite;
+        }
+        @keyframes pulseBtn {
+            0% { box-shadow: 0 20px 50px rgba(139,92,246,0.6); }
+            50% { box-shadow: 0 20px 70px rgba(139,92,246,0.9); }
+            100% { box-shadow: 0 20px 50px rgba(139,92,246,0.6); }
+        }
+
+        /* تگ‌ها */
+        .tag {
+            background: rgba(139,92,246,0.15);
+            color: var(--accent);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        .tag:nth-child(1) { animation-delay: 0.1s; }
+        .tag:nth-child(2) { animation-delay: 0.2s; }
+        .tag:nth-child(3) { animation-delay: 0.3s; }
+        .tag:hover { background: var(--accent); color: #fff; transform: translateY(-3px); }
+
+        /* تماس */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        @media (max-width: 992px) {
+            .contact-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 576px) {
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+
+        /* لینک‌های دیزاین شده */
+        .styled-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            padding-bottom: 2px;
+        }
+        .styled-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            transition: width 0.4s ease;
+        }
+        .styled-link:hover {
+            color: var(--accent2);
+            transform: translateY(-1px);
+        }
+        .styled-link:hover::after {
+            width: 100%;
+        }
+
+        /* انیمیشن‌های عمومی */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        section, .skill-item, .project-card, .card, .contact-item, .about-card {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        section.visible, .skill-item.visible, .project-card.visible, 
+        .card.visible, .contact-item.visible, .about-card.visible {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Ashkan Norouzi</h1>
+            <p style="font-size:2rem;color:var(--gray);margin:30px 0;animation:fadeInUp 1s ease-out 0.5s forwards;opacity:0;">
+                مهندس بک‌اند پایتون • متخصص Web Scraping • توسعه‌دهنده اتوماسیون
+            </p>
+            <p style="font-size:1.4rem;max-width:900px;margin:0 auto 40px;color:#ccc;animation:fadeInUp 1s ease-out 0.7s forwards;opacity:0;">
+                دانشجوی ترم ۶ علوم کامپیوتر دانشگاه آزاد تهران غرب<br>
+                هم‌اکنون مهندس بک‌اند در پروژه یاکند MCI (همراه اول)
+            </p>
+            <a href="#contact" class="btn">ارتباط با من</a>
+        </div>
+    </header>
+
+    <!-- درباره من -->
+    <section>
+        <div class="container">
+            <h2>درباره من</h2>
+            <div class="about-card">
+                من اشکان نوروزی هستم و در زمینه بک‌اند دولوپینگ در حال فعالیت هستم.<br>
+                تجربیاتی نسبتاً گسترده در این چند سال کسب کردم که باعث افزایش مهارت من شد.<br>
+                اکنون در زمینه Web Scraping فعالیت دارم و کار می‌کنم. سابقه کار در زمینه هوش مصنوعی داشتم.<br>
+                با ابزارهای بسیاری که در ادامه خواهم گفت کار کرده‌ام و به زبان‌ها و کتابخانه‌هایی که خواهم گفت مسلط هستم.<br><br>
+                به دنبال افزایش مهارت خود از کارهای عملی هستم و علاقه زیادی به کارهای عملی دارم.<br>
+                دارای سابقه و تجربه در زمینه‌های ذکر شده هستم. دانشجوی دانشگاه آزاد تهران غرب و ترم ۶ رشته علوم کامپیوتر هستم.<br>
+                چندین سال سابقه کار در بک‌اند دولوپینگ دارم. مقدار کمی DevOps کار کرده‌ام و با مفاهیم شبکه و امنیتی تا حدی متوسط برخوردار هستم.<br><br>
+                همچنان مشغول کار هستم و عاشق چالش‌های واقعی و پروژه‌های بزرگ هستم.
+            </div>
+        </div>
+    </section>
+
+    <!-- تجربه کاری -->
+    <section style="background:#0f0f1a;">
+        <div class="container">
+            <h2>تجربه کاری</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:40px;">
+                <div class="card" style="--i:0;">
+                    <h3 style="color:var(--accent);font-size:1.6rem;">شرکت پیشرو سیستم پایدار آسیا (پیمانکار MCI)</h3>
+                    <p><strong>از ۱۴۰۳ تاکنون</strong> – مهندس بک‌اند و اتوماسیون</p>
+                    <p>پروژه یاکند – سیستم تیکتینگ و مانیتورینگ همراه اول</p>
+                    <a href="https://pishrosys.com" target="_blank" class="styled-link">pishrosys.com</a> • 
+                    <a href="https://mci.ir" target="_blank" class="styled-link">mci.ir</a>
+                </div>
+                <div class="card" style="--i:1;">
+                    <h3 style="color:var(--accent);font-size:1.6rem;">شرکت حسابداری نرم‌افزار جهش</h3>
+                    <p><strong>۳ ماه – ۱۴۰۱</strong> – توسعه‌دهنده بک‌اند</p>
+                    <a href="https://jaheshsoft.com" target="_blank" class="styled-link">jaheshsoft.com</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- مهارت‌های زبانی -->
+    <section>
+        <div class="container">
+            <h2>مهارت‌های زبانی</h2>
+            <div style="max-width:900px;margin:0 auto;">
+                <div class="skill-item" style="--i:0;"><strong>Python</strong> → ۸۰٪<div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div></div>
+                <div class="skill-item" style="--i:1;"><strong>SQL Server</strong> → ۶۰٪<div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div></div>
+                <div class="skill-item" style="--i:2;"><strong>HTML</strong> → ۵۰٪<div class="skill-bar"><div class="skill-fill" style="width:50%"></div></div></div>
+                <div class="skill-item" style="--i:3;"><strong>CSS</strong> → ۵۰٪<div class="skill-bar"><div class="skill-fill" style="width:50%"></div></div></div>
+                <div class="skill-item" style="--i:4;"><strong>JavaScript</strong> → ۴۰٪<div class="skill-bar"><div class="skill-fill" style="width:40%"></div></div></div>
+                <div class="skill-item" style="--i:5;"><strong>C#</strong> → ۳۰٪<div class="skill-bar"><div class="skill-fill" style="width:30%"></div></div></div>
+                <div class="skill-item" style="--i:6;"><strong>Dart</strong> → ۳۰٪<div class="skill-bar"><div class="skill-fill" style="width:30%"></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- دوره‌های آموزشی -->
+    <section style="background:#0f0f1a;">
+        <div class="container">
+            <h2>دوره‌های آموزشی</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:32px;max-width:1200px;margin:0 auto;">
+                <div class="card" style="--i:0;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                        <i class="fas fa-database" style="color:var(--accent);font-size:1.8rem;"></i>
+                        <h3 style="color:var(--accent);font-size:1.5rem;margin:0;">اصول پایگاه داده و SQL Server</h3>
+                    </div>
+                    <p><strong>مکتب‌خونه</strong> • مدرس: حمیدرضا صادقیان</p>
+                    <p><i class="fas fa-clock"></i> ۶۷ ساعت • سال ۱۴۰۲</p>
+                </div>
+                <div class="card" style="--i:1;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                        <i class="fas fa-table" style="color:#10b981;font-size:1.8rem;"></i>
+                        <h3 style="color:var(--accent);font-size:1.5rem;margin:0;">اکسل مقدماتی</h3>
+                    </div>
+                    <p><strong>مجتمع فنی تهران - واحد پیروزی</strong></p>
+                    <p><i class="fas fa-clock"></i> ۲۴ ساعت • سال ۱۴۰۲</p>
+                </div>
+                <div class="card" style="--i:2;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                        <i class="fas fa-chart-line" style="color:#f59e0b;font-size:1.8rem;"></i>
+                        <h3 style="color:var(--accent);font-size:1.5rem;margin:0;">اکسل پیشرفته</h3>
+                    </div>
+                    <p><strong>مجتمع فنی تهران - واحد پیروزی</strong></p>
+                    <p><i class="fas fa-clock"></i> ۲۴ ساعت • سال ۱۴۰۲</p>
+                </div>
+                <div class="card" style="--i:3;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                        <i class="fab fa-python" style="color:#3b82f6;font-size:1.8rem;"></i>
+                        <h3 style="color:var(--accent);font-size:1.5rem;margin:0;">پایتون پیشرفته</h3>
+                    </div>
+                    <p><strong>مجتمع فنی تهران - واحد پیروزی</strong></p>
+                    <p><i class="fas fa-clock"></i> ۴۴ ساعت • سال ۱۴۰۲</p>
+                </div>
+                <div class="card" style="--i:4;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                        <i class="fas fa-brain" style="color:#a855f7;font-size:1.8rem;"></i>
+                        <h3 style="color:var(--accent);font-size:1.5rem;margin:0;">هوش مصنوعی با پایتون</h3>
+                    </div>
+                    <p><strong>مجتمع فنی تهران - واحد پیروزی</strong></p>
+                    <p><i class="fas fa-clock"></i> ۳۴ ساعت • سال ۱۴۰۲</p>
+                </div>
+                <div class="card" style="--i:5;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                        <i class="fab fa-linux" style="color:#22c55e;font-size:1.8rem;"></i>
+                        <h3 style="color:var(--accent);font-size:1.5rem;margin:0;">آموزش کامل لینوکس</h3>
+                    </div>
+                    <p><strong>نابغه‌ها</strong></p>
+                    <p><i class="fas fa-clock"></i> ۲۴ ساعت • سال ۱۴۰۱</p>
+                    <p style="color:#f87171;"><i class="fas fa-times-circle"></i> بدون گواهینامه</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- سیستم‌عامل‌ها و ابزارها -->
+    <section>
+        <div class="container">
+            <h2>سیستم‌عامل‌ها و ابزارها</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;text-align:center;">
+                <div class="card" style="--i:0;"><strong>سیستم‌عامل‌ها:</strong><br>Kali Linux • Ubuntu • Windows Server • Windows</div>
+                <div class="card" style="--i:1;"><strong>ابزارها:</strong><br>Nessus • Nmap • Wireshark • Docker • Git • Postman • curl • Grafana • n8n • Registry Editor • DB Browser • Excel • Word • PowerPoint • System Center Service Manager • SeleniumWire</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- کتابخانه‌های پایتون -->
+    <section style="background:#0f0f1a;">
+        <div class="container">
+            <h2>کتابخانه‌های پایتون (تخصص اصلی)</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:30px;">
+                <div class="card" style="--i:0;"><strong>Web & Scraping:</strong> requests, selenium/seleniumwire, bs4, lxml, scrapy, playwright</div>
+                <div class="card" style="--i:1;"><strong>Data Science & ML:</strong> pandas, numpy, matplotlib, scikit-learn, tensorflow</div>
+                <div class="card" style="--i:2;"><strong>Web Development:</strong> flask, werkzeug</div>
+                <div class="card" style="--i:3;"><strong>GUI & Desktop:</strong> tkinter, ttkbootstrap, pywin32, pillow (PIL)</div>
+                <div class="card" style="--i:4;"><strong>Automation & Bots:</strong> telebot, pyautogui, winshell</div>
+                <div class="card" style="--i:5;"><strong>Utilities:</strong> jdatetime, hashlib, json5, csv, threading, concurrent, asyncio, pytest, colorama, tabulate, glob2</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- کتابخانه شخصی -->
+    <section>
+        <div class="container">
+            <h2>کتابخانه‌ای که خودم نوشتم</h2>
+            <div class="card" style="text-align:center;font-size:1.6rem;padding:50px;">
+                <strong>ashcount</strong><br>
+                A set of things that can be done with files. For example, finding the number of lines in a file Find the number of words Find the net code count of a Python file<br><br>
+                <a href="https://pypi.org/project/ashcount/" target="_blank" class="styled-link">pypi.org/project/ashcount</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- پروژه‌ها -->
+    <section style="background:#0f0f1a;">
+        <div class="container">
+            <h2>۱۰ پروژه برتر من</h2>
+            <div class="projects-grid">
+                <a href="https://github.com/ashkan0201/Yakand-Web-Scraping-Automation" target="_blank" class="project-card" style="--i:0;">
+                    <div class="project-icon" style="background:#8b5cf6;color:#fff;"><i class="fas fa-robot"></i></div>
+                    <div class="project-info">
+                        <h3>یاکند وب اسکریپینگ اتوماسیون</h3>
+                        <p>سیستم اتوماسیون سازمانی MCI (همراه اول)</p>
+                        <div class="tags"><span class="tag">Selenium</span><span class="tag">Docker</span><span class="tag">Automation</span></div>
+                    </div>
+                </a>
+                <a href="https://pypi.org/project/ashcount/" target="_blank" class="project-card" style="--i:1;">
+                    <div class="project-icon" style="background:#ec4899;color:#fff;"><i class="fas fa-cube"></i></div>
+                    <div class="project-info">
+                        <h3>ashcount – پکیج PyPI شخصی</h3>
+                        <p>تبدیل اعداد فارسی/عربی • منتشر شده در PyPI</p>
+                        <div class="tags"><span class="tag">PyPI</span><span class="tag">Open Source</span></div>
+                    </div>
+                </a>
+                <a href="https://github.com/ashkan0201/Divar_api" target="_blank" class="project-card" style="--i:2;">
+                    <div class="project-icon" style="background:#10b981;color:#fff;"><i class="fas fa-exchange-alt"></i></div>
+                    <div class="project-info">
+                        <h3>Divar API Wrapper</h3>
+                        <p>رابط غیررسمی و تمیز دیوار</p>
+                        <div class="tags"><span class="tag">API</span><span class="tag">Scraping</span></div>
+                    </div>
+                </a>
+                <a href="https://github.com/ashkan0201/digikala" target="_blank" class="project-card" style="--i:3;">
+                    <div class="project-icon" style="background:#f59e0b;color:#fff;"><i class="fas fa-shopping-cart"></i></div>
+                    <div class="project-info">
+                        <h3>دیجی‌کالا اسکریپر حرفه‌ای</h3>
+                        <p>استخراج داده محصولات در مقیاس بالا</p>
+                        <div class="tags"><span class="tag">Selenium</span><span class="tag">Pandas</span></div>
+                    </div>
+                </a>
+                <a href="https://github.com/ashkan0201/ShareIT_WEB" target="_blank" class="project-card" style="--i:4;">
+                    <div class="project-icon" style="background:#3b82f6;color:#fff;"><i class="fas fa-share-alt"></i></div>
+                    <div class="project-info">
+                        <h3>ShareIT WEB</h3>
+                        <p>اشتراک‌گذاری فایل realtime با Flask</p>
+                        <div class="tags"><span class="tag">Flask</span><span class="tag">WebSocket</span></div>
+                    </div>
+                </a>
+                <a href="https://github.com/ash  <a href="https://github.com/ashkan0201/Ai_notebook" target="_blank" class="project-card" style="--i:5;">
+                    <div class="project-icon" style="background:#a855f7;color:#fff;"><i class="fas fa-brain"></i></div>
+                    <div class="project-info">
+                        <h3>AI Notebook</h3>
+                        <p>آزمایش‌های هوش مصنوعی و یادگیری ماشین</p>
+                        <div class="tags"><span class="tag">TensorFlow</span><span class="tag">Scikit-learn</span></div>
+                    </div>
+                </a>
+                <a href="https://github.com/ashkan0201/Telegram_bot" target="_blank" class="project-card" style="--i:6;">
+                    <div class="project-icon" style="background:#0ea5e9;color:#fff;"><i class="fab fa-telegram-plane"></i></div>
+                    <div class="project-info">
+                        <h3>تلگرام بات پیشرفته</h3>
+                        <p>بات حرفه‌ای با قابلیت‌های متعدد</p>
+                        <div class="tags"><span class="tag">telebot</span><span class="tag">Automation</span></div>
+                    </div>
+                </a>
+                <a href="https://github.com/ashkan0201/Find_Wi-Fi_password" target="_blank" class="project-card" style="--i:7;">
+                    <div class="project-icon" style="background:#ef4444;color:#fff;"><i class="fas fa-wifi"></i></div>
+                    <div class="project-info">
+                        <h3>بازیابی رمز وای‌فای</h3>
+                        <p>استخراج پسوردهای ذخیره‌شده ویندوز</p>
+                        <div class="tags"><span class="tag">pywin32</span><span class="tag">Security</span></div>
+                    </div>
+                </a>
+                <a href="https://github.com/ashkan0201/Football-on-the-table" target="_blank" class="project-card" style="--i:8;">
+                    <div class="project-icon" style="background:#22c55e;color:#fff;"><i class="fas fa-futbol"></i></div>
+                    <div class="project-info">
+                        <h3>فوتبال روی میز</h3>
+                        <p>بازی دو نفره با Pygame</p>
+                        <div class="tags"><span class="tag">Pygame</span><span class="tag">Game Dev</span></div>
+                    </div>
+                </a>
+                <a href="https://github.com/ashkan0201/File_writer-ui" target="_blank" class="project-card" style="--i:9;">
+                    <div class="project-icon" style="background:#6366f1;color:#fff;"><i class="fas fa-edit"></i></div>
+                    <div class="project-info">
+                        <h3>File Writer با رابط گرافیکی</h3>
+                        <p>ابزار نوشتن و مدیریت فایل با Tkinter</p>
+                        <div class="tags"><span class="tag">Tkinter</span><span class="tag">ttkbootstrap</span></div>
+                    </div>
+                </a>
+            </div>
+            <div style="text-align:center;margin-top:80px;">
+                <a href="https://github.com/ashkan0201" target="_blank" class="btn">همه ۲۳+ پروژه در گیت‌هاب →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ارتباط با من -->
+    <section>
+        <div class="container">
+            <h2>ارتباط با من</h2>
+            <div class="contact-grid">
+                <div class="contact-item" style="--i:0;"><i class="fab fa-github"></i><p style="margin:20px 0;">گیت‌هاب</p><a href="https://github.com/ashkan0201" target="_blank" class="styled-link">ashkan0201</a></div>
+                <div class="contact-item" style="--i:1;"><i class="fas fa-envelope"></i><p style="margin:20px 0;">ایمیل</p><a href="mailto:ashkan02011@gmail.com" class="styled-link">ashkan02011@gmail.com</a></div>
+                <div class="contact-item" style="--i:2;"><i class="fas fa-mobile-alt"></i><p style="margin:20px 0;">موبایل</p><a href="tel:09191401586" class="styled-link">09191401586</a></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+
+                        if (entry.target.classList.contains('skill-item')) {
+                            const fill = entry.target.querySelector('.skill-fill');
+                            const textEl = entry.target.querySelector('strong');
+                            if (fill && textEl) {
+                                const match = textEl.textContent.match(/(\d+)%/);
+                                if (match) {
+                                    setTimeout(() => {
+                                        fill.style.width = match[1] + '%';
+                                    }, 150);
+                                }
+                            }
+                        }
+
+                        entry.target.querySelectorAll('.tag').forEach((tag, i) => {
+                            setTimeout(() => {
+                                tag.style.opacity = '1';
+                                tag.style.transform = 'translateY(0)';
+                            }, i * 120);
+                        });
+
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+
+            document.querySelectorAll('section, .skill-item, .project-card, .card, .contact-item, .about-card').forEach((el, i) => {
+                el.style.setProperty('--i', i % 12);
+                if (!el.classList.contains('visible')) {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(30px)';
+                    el.style.transition = 'all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)';
+                }
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
