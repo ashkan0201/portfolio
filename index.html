@@ -27,6 +27,7 @@
             line-height: 1.9;
             overflow-x: hidden;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            padding-top: 80px; /* برای منوی ثابت */
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
 
@@ -161,6 +162,17 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             animation: shimmer 2s infinite;
         }
+        .skill-fill::after {
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
         @keyframes shimmer {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
@@ -385,10 +397,345 @@
                 font-size: 2rem;
             }
         }
+
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 18, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 999;
+            padding: 16px 0;
+            transition: all 0.4s ease;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-brand svg {
+            width: 36px;
+            height: 36px;
+            fill: none;
+            stroke: url(#gradient);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.6));
+            animation: iconPulse 3s ease-in-out infinite, iconRotate 12s linear infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.6)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 25px rgba(139, 92, 246, 1)); }
+        }
+
+        @keyframes iconRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .nav-brand defs {
+            display: block !important;
+        }
+
+        .desktop-menu {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 500;
+        }
+
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 8px 0;
+            white-space: nowrap;
+            display: block;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+            border-radius: 1px;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 340px;
+            height: 100vh;
+            background: rgba(12, 12, 22, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 100px 30px 40px;
+            transition: right 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), transparent);
+            pointer-events: none;
+        }
+
+        .mobile-menu .nav-brand {
+            position: absolute;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .mobile-menu .nav-menu {
+            flex-direction: column;
+            gap: 4px;
+            padding-top: 20px;
+        }
+
+        .mobile-menu .nav-link {
+            font-size: 1.25rem;
+            padding: 14px 0;
+            color: var(--gray);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.15);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .mobile-menu .nav-link:hover {
+            color: var(--accent);
+            padding-right: 12px;
+            border-color: var(--accent);
+        }
+
+        @media (max-width: 992px) {
+            .hamburger {
+                display: flex;
+            }
+            .desktop-menu {
+                display: none !important;
+            }
+        }
+
+        @media (min-width: 993px) {
+            .mobile-menu {
+                display: none !important;
+            }
+        }
+
+        .mobile-menu .nav-menu li {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.5s ease;
+        }
+
+        .mobile-menu.active .nav-menu li {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .mobile-menu.active .nav-menu li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active .nav-menu li:nth-child(2) { transition-delay: 0.15s; }
+        .mobile-menu.active .nav-menu li:nth-child(3) { transition-delay: 0.2s; }
+        .mobile-menu.active .nav-menu li:nth-child(4) { transition-delay: 0.25s; }
+        .mobile-menu.active .nav-menu li:nth-child(5) { transition-delay: 0.3s; }
+        .mobile-menu.active .nav-menu li:nth-child(6) { transition-delay: 0.35s; }
+        .mobile-menu.active .nav-menu li:nth-child(7) { transition-delay: 0.4s; }
+        .mobile-menu.active .nav-menu li:nth-child(8) { transition-delay: 0.45s; }
+        .mobile-menu.active .nav-menu li:nth-child(9) { transition-delay: 0.5s; }
+        .mobile-menu.active .nav-menu li:nth-child(10) { transition-delay: 0.55s; }
+        .code-icon {
+            width: 38px;
+            height: 38px;
+            filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.6));
+            animation: iconFloat 4s ease-in-out infinite, iconPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(2deg); }
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.6)); }
+            50% { filter: drop-shadow(0 0 25px rgba(139, 92, 246, 1)); }
+        }
+
+        .code-icon path {
+            stroke-dasharray: 0 100;
+        }
     </style>
 </head>
 <body data-theme="dark">
-    <header>
+
+    <!-- منوی اصلی -->
+    <nav id="main-nav" class="main-nav">
+        <div class="container nav-container">
+            <div class="nav-brand">
+                <svg class="code-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#8b5cf6"/>
+                            <stop offset="100%" stop-color="#3b82f6"/>
+                        </linearGradient>
+                        <linearGradient id="grad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#3b82f6"/>
+                            <stop offset="100%" stop-color="#8b5cf6"/>
+                        </linearGradient>
+                    </defs>
+
+                    <path d="M18 14 L10 32 L18 50" fill="none" stroke="url(#grad1)" stroke-width="5" stroke-linecap="round">
+                        <animate attributeName="stroke-dasharray" from="0,100" to="100,0" dur="2s" repeatCount="indefinite"/>
+                    </path>
+
+                    <path d="M46 14 L54 32 L46 50" fill="none" stroke="url(#grad2)" stroke-width="5" stroke-linecap="round">
+                        <animate attributeName="stroke-dasharray" from="0,100" to="100,0" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+                    </path>
+
+                    <path d="M22 44 L42 20" fill="none" stroke="url(#grad1)" stroke-width="4" stroke-linecap="round">
+                        <animate attributeName="stroke-dasharray" from="0,50" to="50,0" dur="1.5s" repeatCount="indefinite" begin="0.6s"/>
+                    </path>
+                </svg>
+            </div>
+
+            <!-- دکمه همبرگر -->
+            <button class="hamburger" aria-label="باز کردن منو" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- منوی دسکتاپ -->
+            <ul class="nav-menu desktop-menu">
+                <li><a href="#header" class="nav-link">خانه</a></li>
+                <li><a href="#about" class="nav-link">درباره من</a></li>
+                <li><a href="#experience" class="nav-link">تجربه کاری</a></li>
+                <li><a href="#skills" class="nav-link">مهارت‌های زبانی</a></li>
+                <li><a href="#courses" class="nav-link">دوره‌های آموزشی</a></li>
+                <li><a href="#Os_tools" class="nav-link">سیستم‌عامل‌ها و ابزارها</a></li>
+                <li><a href="#pylibraries" class="nav-link">کتابخانه‌های پایتون</a></li>
+                <li><a href="#Perlibrary" class="nav-link">کتابخانه شخصی</a></li>
+                <li><a href="#projects" class="nav-link">پروژه‌ها</a></li>
+                <li><a href="#contact" class="nav-link">ارتباط با من</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- منوی موبایل -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="nav-brand">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#8b5cf6"/>
+                        <stop offset="100%" stop-color="#3b82f6"/>
+                    </linearGradient>
+                </defs>
+                <path d="M3 18l18-12M3 12l18-6M3 6l18 0"/>
+                <path d="M3 18v-6l6 4M15 6v6l6-4"/>
+            </svg>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="#header" class="nav-link">خانه</a></li>
+            <li><a href="#about" class="nav-link">درباره من</a></li>
+            <li><a href="#experience" class="nav-link">تجربه کاری</a></li>
+            <li><a href="#skills" class="nav-link">مهارت‌های زبانی</a></li>
+            <li><a href="#courses" class="nav-link">دوره‌های آموزشی</a></li>
+            <li><a href="#Os_tools" class="nav-link">سیستم‌عامل‌ها و ابزارها</a></li>
+            <li><a href="#pylibraries" class="nav-link">کتابخانه‌های پایتون</a></li>
+            <li><a href="#Perlibrary" class="nav-link">کتابخانه شخصی</a></li>
+            <li><a href="#projects" class="nav-link">پروژه‌ها</a></li>
+            <li><a href="#contact" class="nav-link">ارتباط با من</a></li>
+        </ul>
+    </div>
+
+    <header id="header">
         <div class="container">
             <h1>Ashkan Norouzi</h1>
             <p style="font-size:2rem;color:var(--gray);margin:30px 0;animation:fadeInUp 1s ease-out 0.5s forwards;opacity:0;">
@@ -403,7 +750,7 @@
     </header>
 
     <!-- درباره من -->
-    <section>
+    <section id="about">
         <div class="container">
             <h2>درباره من</h2>
             <div class="about-card">
@@ -420,7 +767,7 @@
     </section>
 
     <!-- تجربه کاری -->
-    <section style="background:#0f0f1a;">
+    <section id="experience" style="background:#0f0f1a;">
         <div class="container">
             <h2>تجربه کاری</h2>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:40px;">
@@ -441,7 +788,7 @@
     </section>
 
     <!-- مهارت‌های زبانی -->
-    <section>
+    <section id="skills">
         <div class="container">
             <h2>مهارت‌های زبانی</h2>
             <div style="max-width:900px;margin:0 auto;">
@@ -457,7 +804,7 @@
     </section>
 
     <!-- دوره‌های آموزشی -->
-    <section style="background:#0f0f1a;">
+    <section id="courses" style="background:#0f0f1a;">
         <div class="container">
             <h2>دوره‌های آموزشی</h2>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:32px;max-width:1200px;margin:0 auto;">
@@ -515,7 +862,7 @@
     </section>
 
     <!-- سیستم‌عامل‌ها و ابزارها -->
-    <section>
+    <section id="Os_tools">
         <div class="container">
             <h2>سیستم‌عامل‌ها و ابزارها</h2>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;text-align:center;">
@@ -526,7 +873,7 @@
     </section>
 
     <!-- کتابخانه‌های پایتون -->
-    <section style="background:#0f0f1a;">
+    <section id="pylibraries" style="background:#0f0f1a;">
         <div class="container">
             <h2>کتابخانه‌های پایتون (تخصص اصلی)</h2>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:30px;">
@@ -541,7 +888,7 @@
     </section>
 
     <!-- کتابخانه شخصی -->
-    <section>
+    <section id="Perlibrary">
         <div class="container">
             <h2>کتابخانه‌ای که خودم نوشتم</h2>
             <div class="card" style="text-align:center;font-size:1.6rem;padding:50px;">
@@ -553,7 +900,7 @@
     </section>
 
     <!-- پروژه‌ها -->
-    <section style="background:#0f0f1a;">
+    <section id="projects" style="background:#0f0f1a;">
         <div class="container">
             <h2>۱۰ پروژه برتر من</h2>
             <div class="projects-grid">
@@ -645,8 +992,8 @@
     </section>
 
     <!-- ارتباط با من -->
-    <section>
-        <div class="container" id="contact">
+    <section id="contact">
+        <div class="container">
             <h2>ارتباط با من</h2>
             <div class="contact-grid">
                 <div class="contact-item" style="--i:0;"><i class="fab fa-github"></i><p style="margin:20px 0;">گیت‌هاب</p><a href="https://github.com/ashkan0201" target="_blank" class="styled-link">ashkan0201</a></div>
@@ -657,46 +1004,62 @@
     </section>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", function () {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.querySelector('#mobileMenu');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            if (!hamburger || !mobileMenu) return;
+
+            hamburger.addEventListener('click', () => {
+                const isActive = mobileMenu.classList.toggle('active');
+                hamburger.classList.toggle('active');
+                hamburger.setAttribute('aria-expanded', isActive);
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = targetId === '#header'
+                        ? document.querySelector('header')
+                        : document.getElementById(targetId.substring(1));
+
+                    mobileMenu.classList.remove('active');
+                    hamburger.classList.remove('active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
 
-                        if (entry.target.classList.contains('skill-item')) {
-                            const fill = entry.target.querySelector('.skill-fill');
-                            const textEl = entry.target.querySelector('strong');
-                            if (fill && textEl) {
-                                const match = textEl.textContent.match(/(\d+)%/);
-                                if (match) {
-                                    setTimeout(() => {
-                                        fill.style.width = match[1] + '%';
-                                    }, 150);
-                                }
+                        const skillFill = entry.target.querySelector('.skill-fill');
+                        if (skillFill) {
+                            const percent = entry.target.querySelector('strong').textContent.match(/(\d+)%/);
+                            if (percent) {
+                                setTimeout(() => {
+                                    skillFill.style.width = percent[1] + '%';
+                                }, 100);
                             }
                         }
-
-                        entry.target.querySelectorAll('.tag').forEach((tag, i) => {
-                            setTimeout(() => {
-                                tag.style.opacity = '1';
-                                tag.style.transform = 'translateY(0)';
-                            }, i * 120);
-                        });
 
                         observer.unobserve(entry.target);
                     }
                 });
             }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
 
-            document.querySelectorAll('section, .skill-item, .project-card, .card, .contact-item, .about-card').forEach((el, i) => {
-                el.style.setProperty('--i', i % 12);
-                if (!el.classList.contains('visible')) {
-                    el.style.opacity = '0';
-                    el.style.transform = 'translateY(30px)';
-                    el.style.transition = 'all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)';
-                }
-                observer.observe(el);
-            });
+            document.querySelectorAll('section, .skill-item, .project-card, .card, .contact-item, .about-card')
+                .forEach(el => observer.observe(el));
         });
     </script>
 </body>
